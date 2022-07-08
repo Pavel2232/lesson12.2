@@ -1,20 +1,21 @@
 import logging
 from json import JSONDecodeError
 
-from flask import Blueprint,render_template,request, send_from_directory
-from functions import add_post, save_pic
-loader_bp_blueprint = Blueprint('loader_bp_blueprint', __name__, template_folder= 'templates')
+from flask import Blueprint, render_template, request, send_from_directory
+from utils import add_post, save_pic
 
+loader_bp_blueprint = Blueprint('loader_bp_blueprint', __name__, template_folder='template')
 
 
 @loader_bp_blueprint.route('/post')
 def page_post():
-    '''Страница с добавление поста'''
+    """Страница с добавление поста"""
     return render_template('post_form.html')
+
 
 @loader_bp_blueprint.route('/post', methods=['POST'])
 def page_post_upload():
-    '''Страница с добавлением поста'''
+    """Страница с добавлением поста"""
     picture = request.files.get('picture')
     content = request.form['content']
     if not picture or not content:
@@ -29,8 +30,8 @@ def page_post_upload():
         return 'Файл не найден'
     except JSONDecodeError:
         return 'Файл не подходит'
-    post = add_post({'pic': filename , 'content': content })
-    return render_template('post_uploaded.html', post= post)
+    post = add_post({'pic': filename, 'content': content})
+    return render_template('post_uploaded.html', post=post)
 
 
 @loader_bp_blueprint.route("/uploads/<path:path>")
